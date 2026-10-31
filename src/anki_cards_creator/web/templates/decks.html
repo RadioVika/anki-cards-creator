@@ -1,0 +1,10 @@
+<div class="row">
+  <select id="deck" name="deck" aria-label="Deck">
+    <option value="">Choose a deck</option>
+    {% for deck in decks %}
+    <option value="{{ deck }}" {% if deck == selected %}selected{% endif %}>{{ deck }}</option>
+    {% endfor %}
+  </select>
+  <button class="secondary" type="button" hx-get="/decks" hx-target="#deck-selector" hx-include="#deck">Refresh</button>
+</div>
+{% if error %}<p class="message error">{{ error }}</p>{% endif %}

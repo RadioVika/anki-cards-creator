@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anki Cards Creator</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/htmx.min.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Anki Cards Creator</h1>
+
+    <div id="anki-status" hx-get="/health/anki" hx-trigger="load, every 10s"></div>
+
+    <div class="panel">
+      <section>
+        <div id="deck-selector" hx-get="/decks" hx-trigger="load"></div>
+      </section>
+
+      <section>
+        <form class="row" hx-post="/options" hx-target="#options" hx-indicator="#spinner"
+              hx-disabled-elt="find button">
+          <input id="word" name="word" placeholder="Enter a word" aria-label="Word" maxlength="100" required autofocus>
+          <select class="level" name="level" aria-label="Level">
+            {% for level in levels %}
+            <option value="{{ level }}" {% if level == default_level %}selected{% endif %}>{{ level }}</option>
+            {% endfor %}
+          </select>
+          <button>Generate</button>
+          <span id="spinner" class="htmx-indicator">Generating…</span>
+        </form>
+      </section>
+    </div>
+
+    <section id="options"></section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% set added = status == "created" %}
+<form class="card{% if added %} added{% endif %}" hx-post="/cards" hx-swap="outerHTML" hx-include="#deck" hx-disabled-elt="find button">
+  <input type="hidden" name="word" value="{{ card.word }}">
+  <input type="hidden" name="front_text" value="{{ card.front_text }}">
+  <input type="hidden" name="back_text" value="{{ card.back_text }}">
+  <span class="field-label">Front</span>
+  <div class="editable" data-field="front_text" role="textbox" aria-label="Front" aria-multiline="true" {% if not added %}contenteditable="plaintext-only"{% endif %}>{{ card.front_text | card_html }}</div>
+  <span class="field-label">Back</span>
+  <div class="editable" data-field="back_text" role="textbox" aria-label="Back" aria-multiline="true" {% if not added %}contenteditable="plaintext-only"{% endif %}>{{ card.back_text | card_html }}</div>
+  {% if status == "duplicate" %}
+  <p class="message error">Already in Anki.</p>
+  <input type="hidden" name="allow_duplicates" value="true">
+  {% elif error %}
+  <p class="message error">{{ error }}</p>
+  {% endif %}
+  <div class="card-actions">
+    {% if added %}
+    <button type="button" disabled>Added</button>
+    {% elif status == "duplicate" %}
+    <button>Add anyway</button>
+    {% else %}
+    <button>Add to Anki</button>
+    {% endif %}
+  </div>
+</form>

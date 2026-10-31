@@ -1,0 +1,9 @@
+{% if error %}<p class="message error">{{ error }}</p>{% endif %}
+
+{% if cards %}
+<div class="cards">
+  {% for card in cards %}
+  {% include "card.html" %}
+  {% endfor %}
+</div>
+{% endif %}

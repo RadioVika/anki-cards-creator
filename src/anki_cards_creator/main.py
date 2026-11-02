@@ -4,7 +4,7 @@ from pathlib import Path
 import anthropic
 import httpx
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
@@ -17,6 +17,15 @@ from anki_cards_creator.web.routes import router
 HOST = "127.0.0.1"
 PORT = 8000
 ANKI_TIMEOUT_SECONDS = 10
+
+
+class RevalidatedStaticFiles(StaticFiles):
+    """Makes browsers check for a new version instead of reusing a cached file."""
+
+    def file_response(self, *args, **kwargs) -> Response:
+        response = super().file_response(*args, **kwargs)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
 
 
 def build_service(settings: Settings) -> CardService:
@@ -35,7 +44,9 @@ def create_app(service: CardService | None = None) -> FastAPI:
     app = FastAPI(title="Anki Cards Creator")
     app.state.service = service or build_service(Settings())
     app.mount(
-        "/static", StaticFiles(directory=Path(__file__).parent / "web" / "static"), name="static"
+        "/static",
+        RevalidatedStaticFiles(directory=Path(__file__).parent / "web" / "static"),
+        name="static",
     )
     app.include_router(router)
     return app

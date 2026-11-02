@@ -53,16 +53,23 @@ body {
   font: 16px/1.5 system-ui, sans-serif;
 }
 
-main { max-width: 760px; margin: 0 auto; padding: 40px 16px 56px; }
+main {
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  height: 100dvh;
+  margin: 0 auto;
+  padding: 16px;
+}
 
 h1 {
   width: fit-content;
-  margin: 0 0 20px;
+  margin: 0 0 10px;
   background: linear-gradient(90deg, var(--accent), var(--pink) 60%, var(--orange));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.2;
@@ -72,9 +79,10 @@ section { margin-bottom: 24px; }
 
 .panel {
   display: grid;
+  grid-template-columns: 2fr 3fr;
   gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px;
+  margin-bottom: 12px;
+  padding: 12px;
   border: 1px solid var(--border);
   border-radius: 18px;
   background: var(--surface);
@@ -82,6 +90,14 @@ section { margin-bottom: 24px; }
 }
 
 .panel section { margin: 0; }
+
+#options {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+}
 
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .row input, .row select { flex: 1; min-width: 10rem; }
@@ -116,7 +132,7 @@ input:focus-visible, select:focus-visible, .editable:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-.editable { white-space: pre-wrap; overflow-wrap: anywhere; }
+.editable { min-height: 0; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
 
 button {
   padding: 10px 18px;
@@ -154,8 +170,12 @@ button:disabled { opacity: 0.5; cursor: default; }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  flex: 1;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, auto);
+  gap: 12px;
+  align-content: start;
+  min-height: 0;
   animation: rise 0.3s ease-out;
 }
 
@@ -163,13 +183,21 @@ button:disabled { opacity: 0.5; cursor: default; }
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 18px 18px 16px;
+  grid-column: span 2;
+  min-height: 0;
+  padding: 12px 12px 10px;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--surface);
   box-shadow: var(--shadow);
+  font-size: 14px;
+  line-height: 1.35;
 }
+
+/* An incomplete last row sits in the middle of the six-column grid. */
+.card:nth-child(3n + 1):last-child { grid-column: 3 / span 2; }
+.card:nth-child(3n + 1):nth-last-child(2) { grid-column: 2 / span 2; }
 
 .card::before {
   content: "";
@@ -180,6 +208,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 }
 
 .card .editable {
+  padding: 5px 8px;
   border-color: transparent;
   background: color-mix(in srgb, var(--accent) 7%, var(--surface));
 }
@@ -206,17 +235,19 @@ button:disabled { opacity: 0.5; cursor: default; }
 
 .field-label {
   align-self: flex-start;
-  margin: 12px 0 6px;
-  font-size: 12px;
+  flex: none;
+  margin: 6px 0 2px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.field-label:first-of-type { margin-top: 0; }
+.field-label:first-of-type { margin: 2px 0 8px; }
 
-.card .message { margin: 10px 0 0; font-size: 14px; }
-.card-actions { margin-top: auto; padding-top: 14px; }
+.card .message { flex: none; margin: 6px 0 0; padding: 4px 8px; font-size: 13px; }
+.card-actions { position: absolute; top: 10px; right: 12px; }
+.card-actions button { padding: 2px 10px; font-size: 13px; }
 
 .message { margin: 0 0 16px; padding: 8px 12px; border-radius: 10px; }
 .message.error { background: color-mix(in srgb, var(--error) 12%, transparent); color: var(--error); }

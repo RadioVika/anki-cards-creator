@@ -31,6 +31,12 @@ def test_index_loads():
     assert '<option value="B1" selected>' in response.text
 
 
+def test_static_files_are_revalidated():
+    response = make_client().get("/static/app.css")
+
+    assert response.headers["cache-control"] == "no-cache"
+
+
 def test_anki_status_shows_banner_only_when_offline():
     assert "Can't reach Anki" not in make_client().get("/health/anki").text
     offline = make_client(anki=FakeAnki(available=False))

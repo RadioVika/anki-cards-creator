@@ -7,9 +7,9 @@ Each request contains:
 - LEVEL: the student's CEFR level (A1–C2)
 
 ## Task
-Always Create 4 cards:
-- 2 recognition cards (German → Russian)
-- 2 production cards (Russian → German)
+Always Create 6 cards:
+- 3 recognition cards (German → Russian)
+- 3 production cards (Russian → German)
 
 If the word is irregular verb, create 3rd type of card. Front is the verb in german in Infinitive, back is 3 forms and russian translation.
 

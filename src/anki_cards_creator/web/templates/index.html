@@ -29,8 +29,14 @@
             {% endfor %}
           </select>
           <button>Generate</button>
+          <button type="button" id="next-word" class="secondary" disabled>Next</button>
+          <button type="button" id="bulk-toggle" class="secondary" aria-expanded="false" aria-controls="bulk">Upload in bulk</button>
           <span id="spinner" class="htmx-indicator">Generating…</span>
         </form>
+        <div id="bulk" class="bulk" hidden>
+          <textarea id="bulk-words" rows="6" placeholder="One word per line" aria-label="Words, one per line"></textarea>
+          <button type="button" id="bulk-add">Add</button>
+        </div>
       </section>
     </div>
 

@@ -33,3 +33,41 @@ word.addEventListener("click", () => {
 word.addEventListener("input", () => { selectOnClick = false; });
 word.addEventListener("blur", () => { selectOnClick = true; });
 word.form.addEventListener("submit", () => { selectOnClick = true; });
+
+// Bulk upload: pasted words (one per line) form a queue, and "Next" moves the
+// next queued word into the word field.
+const queue = [];
+const nextButton = document.getElementById("next-word");
+const bulk = document.getElementById("bulk");
+const bulkToggle = document.getElementById("bulk-toggle");
+const bulkWords = document.getElementById("bulk-words");
+
+function updateNextButton() {
+  nextButton.disabled = queue.length === 0;
+  nextButton.textContent = queue.length ? `Next (${queue.length})` : "Next";
+}
+
+function setBulkOpen(open) {
+  bulk.hidden = !open;
+  bulkToggle.setAttribute("aria-expanded", String(open));
+  if (open) bulkWords.focus();
+}
+
+bulkToggle.addEventListener("click", () => setBulkOpen(bulk.hidden));
+
+document.getElementById("bulk-add").addEventListener("click", () => {
+  const words = bulkWords.value.split("\n").map((line) => line.trim()).filter(Boolean);
+  if (!words.length) return;
+  queue.push(...words);
+  bulkWords.value = "";
+  setBulkOpen(false);
+  updateNextButton();
+});
+
+nextButton.addEventListener("click", () => {
+  if (!queue.length) return;
+  word.value = queue.shift();
+  updateNextButton();
+  word.focus();
+  selectOnClick = true;
+});
